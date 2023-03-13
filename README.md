@@ -26,7 +26,7 @@ $ npm run start:cluster:dev
 
 ### PM2
 
-Set env variables on file `ecosystem.config.js` (Optional)
+Set env variables on file `ecosystem.config.js`
 ```bash
 $ npm run start:prod
 ```
