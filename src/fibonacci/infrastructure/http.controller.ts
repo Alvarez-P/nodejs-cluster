@@ -5,13 +5,14 @@ export class FibonacciController {
   constructor(private readonly fibonacciService: FibonacciService) {}
 
   calcFibonacci(req: Request, res: Response) {
+    console.log(`[Worker] New request managed by PID ${process.pid}`)
     const result = this.fibonacciService.execute(+req.query.number!)
     res.json({ result })
   }
 
   public routes(): Router {
     const router: Router = Router()
-    router.get('/fibonacci', this.calcFibonacci.bind(this))
+    router.get('/', this.calcFibonacci.bind(this))
     return router
   }
 }

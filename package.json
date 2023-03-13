@@ -4,9 +4,12 @@
   "description": "",
   "main": "cluster.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/cluster.js",
-    "start:dev": "npx nodemon src/cluster.ts"
+    "build": "tsc",
+    "start": "dist/cluster.js",
+    "start:dev": "nodemon src/app.ts",
+    "start:cluster:dev": "nodemon src/cluster.ts",
+    "start:prod": "pm2 start ecosystem.config.js --env production",
+    "test:stress": "loadtest -n 1000 -c 100 --rps 200 http://localhost:3500/api/fibonacci?number=20"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +17,10 @@
   "dependencies": {
     "@appland/appmap-agent-js": "^13.5.2",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "loadtest": "^5.2.0",
+    "pm2": "^5.2.2",
+    "uninstall": "^0.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",

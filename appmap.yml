@@ -1,6 +1,0 @@
-name: nodejs-cluster
-packages:
-  - path: dist
-  - path: src
-language: javascript
-appmap_dir: tmp/appmap
