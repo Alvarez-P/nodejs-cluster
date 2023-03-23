@@ -1,5 +1,6 @@
 import rabbit, { Channel, Connection, ConsumeMessage } from 'amqplib'
 import { FibonacciQueueName } from '../constants'
+
 ;(async () => {
   try {
     const connection: Connection = await rabbit.connect('amqp://localhost')
@@ -8,7 +9,7 @@ import { FibonacciQueueName } from '../constants'
     channel.consume(
       FibonacciQueueName,
       (message: ConsumeMessage | null) => {
-        console.log(`[${FibonacciQueueName}] Queue result: ${message?.content}`)
+        console.log(`[RabbitMQ] Queue result: ${message?.content}`)
       },
       { noAck: true }
     )

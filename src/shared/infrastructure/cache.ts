@@ -18,4 +18,23 @@ export class CacheClient {
     await this.#client.quit()
     return result
   }
+
+  async publish(channel: string, content: string) {
+    await this.#client.connect()
+    const result = await this.#client.publish(channel, content)
+    await this.#client.quit()
+    return result
+  }
+
+  async subscribe(channel: string) {
+    await this.#client.connect()
+    const result = await this.#client.subscribe(channel, (message: string) => {
+      console.log(`[Redis] Queue result: ${message}`)
+    })
+    return result
+  }
+
+  async quit() {
+    return this.#client.quit()
+  }
 }

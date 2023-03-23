@@ -1,13 +1,13 @@
 import { Request, Response, Router } from 'express'
 import { FibonacciService } from '../app/fibonacci.service'
-import { FibonacciQueueProducer } from './queue.producer'
 import { middlewares } from '../../shared/infrastructure'
 import { CacheClient } from '../../shared/infrastructure/cache'
+import { QueueProducer } from '../../shared/types/queue.producer.interface'
 
 export class FibonacciController {
   constructor(
     private readonly fibonacciService: FibonacciService,
-    private readonly fibonacciQueueProducer: FibonacciQueueProducer,
+    private readonly fibonacciQueueProducer: QueueProducer,
     private readonly cacheClient: CacheClient
   ) {}
 
@@ -24,8 +24,9 @@ export class FibonacciController {
   }
   calcFibonacciQueue(req: Request, res: Response) {
     console.log(`[Worker] New request managed by PID ${process.pid}`)
-    this.fibonacciQueueProducer.produce(+req.query.number!)
-    res.end()
+    this.fibonacciQueueProducer.publish(+req.query.number!)
+    const handlerName = this.fibonacciQueueProducer.constructor.name
+    res.send({ message: `Resolved by ${handlerName}` })
   }
 
   public routes(): Router {

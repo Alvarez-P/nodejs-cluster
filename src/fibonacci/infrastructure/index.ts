@@ -1,13 +1,20 @@
 import { cacheClient } from '../../shared/infrastructure'
 import { FibonacciService } from '../app/fibonacci.service'
 import { FibonacciController } from './http.controller'
-import { FibonacciQueueProducer } from './queue.producer'
+import { FibonacciRabbitProducer } from './rabbitmq.producer'
+import { FibonacciRedisProducer } from './redis.producer'
 
 const fibonacciService = new FibonacciService()
-const fibonacciQueueHandler = new FibonacciQueueProducer(fibonacciService)
+
+const fibonacciRabbitHandler = new FibonacciRabbitProducer(fibonacciService)
+const fibonacciRedisHandler = new FibonacciRedisProducer(
+  fibonacciService,
+  cacheClient
+)
+
 const fibonacciController = new FibonacciController(
   fibonacciService,
-  fibonacciQueueHandler,
+  fibonacciRedisHandler,
   cacheClient
 )
 

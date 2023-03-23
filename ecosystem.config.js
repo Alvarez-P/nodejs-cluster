@@ -20,9 +20,14 @@ module.exports = {
       },
     },
     {
-      name: 'WorkerFibonacciConsumer',
+      name: 'WorkerFibonacciRabbitConsumer',
       script: __dirname + '/dist/fibonacci/infrastructure/queue.consumer.js',
       instances: 1,
     },
+    {
+      name: 'WorkerFibonacciRedisConsumer',
+      script: __dirname + '/dist/fibonacci/infrastructure/redis.consumer.js',
+      instances: 1,
+    }
   ],
 }

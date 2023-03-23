@@ -1,11 +1,12 @@
 import rabbit, { Channel, Connection } from 'amqplib'
 import { FibonacciQueueName } from '../constants'
 import { FibonacciService } from '../app/fibonacci.service'
+import { QueueProducer } from '../../shared/types/queue.producer.interface'
 
-export class FibonacciQueueProducer {
+export class FibonacciRabbitProducer implements QueueProducer {
   constructor(private fibonacciService: FibonacciService) {}
 
-  async produce(value: number) {
+  async publish(value: number) {
     try {
       const connection: Connection = await rabbit.connect('amqp://localhost')
       const channel: Channel = await connection.createChannel()
