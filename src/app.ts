@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, Router } from 'express'
-import fibonacciRouter from './fibonacci/infrastructure/http.dependencies'
+import fibonacciRouter from './fibonacci/infrastructure'
 import dotenv from 'dotenv'
+import { middlewares } from './shared/infrastructure'
 
 dotenv.config()
 const app: Express = express()
@@ -12,4 +13,5 @@ router.get('/', (_: Request, res: Response) => {
 })
 router.use('/fibonacci', fibonacciRouter)
 app.use('/api', router)
+app.use(middlewares.error)
 app.listen(SERVER_PORT)
