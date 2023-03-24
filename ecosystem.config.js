@@ -11,12 +11,14 @@ module.exports = {
         SERVER_PORT: 3300,
         REDIS_SERVER_HOST: 'localhost',
         REDIS_SERVER_HOST_PORT: 6379,
+        KAFKA_ZOOKEEPER_CONNECT:'zookeeper:2181'
       },
       env_production: {
         NODE_ENV: 'production',
         SERVER_PORT: 3500,
         REDIS_SERVER_HOST: 'localhost',
         REDIS_SERVER_HOST_PORT: 6379,
+        KAFKA_ZOOKEEPER_CONNECT:'zookeeper:2181'
       },
     },
     {
@@ -27,6 +29,11 @@ module.exports = {
     {
       name: 'WorkerFibonacciRedisConsumer',
       script: __dirname + '/dist/fibonacci/infrastructure/redis.consumer.js',
+      instances: 1,
+    },
+    {
+      name: 'WorkerFibonacciKafkaConsumer',
+      script: __dirname + '/dist/fibonacci/infrastructure/kafka.consumer.js',
       instances: 1,
     }
   ],
