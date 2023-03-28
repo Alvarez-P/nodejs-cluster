@@ -3,7 +3,8 @@ import { FibonacciQueueName } from '../constants'
 
 ;(async () => {
   try {
-    const connection: Connection = await rabbit.connect('amqp://localhost')
+    const host = process.env.RABBITMQ_SERVER_HOST
+    const connection: Connection = await rabbit.connect(`amqp://${host}`)
     const channel: Channel = await connection.createChannel()
     await channel.assertQueue(FibonacciQueueName, { durable: false })
     channel.consume(

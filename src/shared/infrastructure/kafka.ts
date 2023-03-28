@@ -1,4 +1,4 @@
-import { Kafka, Producer, Consumer } from 'kafkajs'
+import { Kafka, Producer, Consumer, Partitioners } from 'kafkajs'
 
 export class KafkaService {
   #client: Kafka
@@ -6,11 +6,16 @@ export class KafkaService {
   #consumer: Consumer | null = null
   constructor() {
     const clientId = 'kafka-client'
-    this.#client = new Kafka({ brokers: ['localhost:9092'], clientId })
+    const host = process.env.KAFKA_SERVER_HOST
+    const port = process.env.KAFKA_SERVER_HOST_PORT
+    this.#client = new Kafka({ brokers: [`${host}:${port}`], clientId })
   }
 
   async publish(topic: string, content: string) {
-    if (!this.#producer) this.#producer = this.#client.producer()
+    if (!this.#producer)
+      this.#producer = this.#client.producer({
+        createPartitioner: Partitioners.DefaultPartitioner,
+      })
     await this.#producer.connect()
     const message = { key: 'key', value: content, partition: 0 }
     await this.#producer.send({ topic, messages: [message] })

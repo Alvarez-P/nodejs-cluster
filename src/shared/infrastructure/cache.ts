@@ -3,7 +3,9 @@ import { RedisClientType, createClient } from 'redis'
 export class CacheClient {
   #client: RedisClientType
   constructor() {
-    this.#client = createClient()
+    const host = process.env.REDIS_SERVER_HOST
+    const port = process.env.REDIS_SERVER_HOST_PORT
+    this.#client = createClient({ url: `redis://${host}:${port}/0` })
   }
 
   async setValue(key: string, value: string) {

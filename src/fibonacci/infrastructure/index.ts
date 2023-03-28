@@ -19,7 +19,7 @@ const fibonacciKafkaHandler = new FibonacciKafkaProducer(
 
 const fibonacciController = new FibonacciController(
   fibonacciService,
-  fibonacciKafkaHandler,
+  fibonacciRabbitHandler,
   cacheClient
 )
 

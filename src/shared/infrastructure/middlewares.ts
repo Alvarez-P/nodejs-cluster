@@ -9,7 +9,7 @@ export class Middlewares {
   async cache(req: Request, res: Response, next: NextFunction) {
     const result = await this.cacheClient.getValue(req.originalUrl)
     console.log(`[Worker] Verifying cache ${req.originalUrl} => ${result}`)
-    if (result) return res.send(result)
+    if (result) return res.send(JSON.parse(result))
     next()
   }
 

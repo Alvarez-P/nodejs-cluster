@@ -8,8 +8,8 @@
     "start": "dist/cluster.js",
     "start:dev": "nodemon src/app.ts",
     "start:cluster:dev": "nodemon src/cluster.ts",
-    "start:prod": "pm2 start ecosystem.config.js --env production",
-    "test:stress": "loadtest -n 1000 -c 100 --rps 200 http://localhost:3500/api/fibonacci/queue?number=20"
+    "start:prod": "pm2-runtime start ecosystem.config.js --env production",
+    "test:stress": "loadtest -n 1000 -c 100 --rps 200 http://localhost:80/api/fibonacci?number=20"
   },
   "keywords": [],
   "author": "",

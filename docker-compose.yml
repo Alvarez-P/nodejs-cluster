@@ -23,18 +23,61 @@ services:
     restart: unless-stopped
     image: confluentinc/cp-kafka:7.0.1
     container_name: cluster-kafka
+    hostname: kafka
     ports:
-      - "9092:9092"
+      - '9092:9092'
     depends_on:
       - zookeeper
     environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka 
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_INTERNAL://broker:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKAJS_NO_PARTITIONER_WARNING: 1
       KAFKA_CREATE_TOPICS: Fibonacci:1:1
-
+  nginx:
+    container_name: cluster-nginx
+    image: nginx
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
+      - api-2
+  api:
+    container_name: cluster-api
+    restart: on-failure
+    build: .
+    ports:
+      - 5000:${SERVER_PORT}
+    volumes:
+      - .:/usr/src/app
+    command: npm run start:dev
+    env_file:
+      - .env
+    depends_on:
+      - kafka
+      - redis
+      - rabbitmq
+      - zookeeper
+  api-2:
+    container_name: cluster-api-2
+    restart: on-failure
+    build: .
+    ports:
+      - 5001:${SERVER_PORT}
+    volumes:
+      - .:/usr/src/app
+    command: npm run start:dev
+    env_file:
+      - .env
+    depends_on:
+      - kafka
+      - redis
+      - rabbitmq
+      - zookeeper
